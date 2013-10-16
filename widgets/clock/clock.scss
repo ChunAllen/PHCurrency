@@ -2,6 +2,7 @@
 // Sass declarations
 // ----------------------------------------------------------------------------
 $background-color:  #dc5945;
+$font-size: 56px;
 
 // ----------------------------------------------------------------------------
 // Widget-clock styles
@@ -10,4 +11,11 @@ $background-color:  #dc5945;
 
   background-color: $background-color;
 
+  h2{
+    font-size: $font-size;
+  }
+
 }
+
+
+
