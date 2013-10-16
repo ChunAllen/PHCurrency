@@ -11,7 +11,7 @@ Twitter.configure do |config|
 end
 
 #search_term = URI::encode('#todayilearned')
-user = "PhStockExchange"
+user = "BangkoSentral"
 
 SCHEDULER.every '10m', :first_in => 0 do |job|
   begin
