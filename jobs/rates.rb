@@ -1,11 +1,11 @@
 require 'rest-client'
 require 'json'
 
-URL = "http://phisix-api.appspot.com/stocks.json"
+URL = "http://rate-exchange.appspot.com/currency?from=JPY&to=PHP"
 
 SCHEDULER.every '2s', :first_in => 0 do |job|
   value = RestClient.get URL
-  data = JSON.parse(value)["stock"]
+  data = JSON.parse(value)
 
   #values
   stocks = Forex.new data
@@ -21,4 +21,3 @@ SCHEDULER.every '2s', :first_in => 0 do |job|
                               max: stocks.total_volume})
   send_event('advances', {items: advances})
 end
-

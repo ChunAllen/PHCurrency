@@ -13,7 +13,6 @@ user = "BangkoSentral"
 
 SCHEDULER.every '10m', :first_in => 0 do |job|
   begin
-    #tweets = Twitter.search("#{search_term}").results
     tweets = Twitter.user_timeline(user)
 
     if tweets
