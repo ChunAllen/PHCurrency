@@ -14,7 +14,6 @@ user = "BangkoSentral"
 SCHEDULER.every '10m', :first_in => 0 do |job|
   begin
     tweets = Twitter.user_timeline(user)
-
     if tweets
       tweets.map! do |tweet|
         { name: tweet.user.name, body: tweet.text, avatar: tweet.user.profile_image_url_https }

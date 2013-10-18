@@ -1,22 +1,27 @@
 require 'rest-client'
 require 'json'
 
-URL = "http://rate-exchange.appspot.com/currency?from=JPY&to=PHP"
+foreign_currencies = ['USD', 'JPY', 'GBP', 'HKD', 'CHF', 'CAD', 'SGD', 'AUD',
+                      'BHD', 'KWD', 'SAR', 'BND', 'IDR', 'THB', 'AED', 'CNY',
+                      'KRW', 'EUR']
 
-SCHEDULER.every '2s', :first_in => 0 do |job|
+foreign_currencies.each do |fc|
+
+  URL = "http://rate-exchange.appspot.com/currency?from=" + fc + "&to=PHP"
+  counts = Hash.new({value: 0})
+
   value = RestClient.get URL
-  data = JSON.parse(value)
+  parsed = JSON.parse(value)
 
-  #values
-  #values = stocks.value(settings.stock_symbol)
+  SCHEDULER.every '2s', :first_in => 0 do |job|
 
-  #top advances
-  advances = data.map{|forx| { :label => forx["from"],
-                                              :value => forx["rate"]}}
+    rate = parsed['rate'].round(2)
 
-  #send_event('stock', {current: values[:current], last: values[:previous]})
-  #send_event('stock-volume', {value: stocks.find(settings.stock_symbol)["volume"],
-                              #max: stocks.total_volume})
-  send_event('advances', {items: advances})
+    #top advances
+    advances = parsed.map{|fx| {:label => parsed['from'], :value => rate }}
+    #  advances = stocks.top_changes.map{|stock| { :label => stock["name"],
+                                                #:value => stock["percent_change"]}}
+    send_event('advances', {items:  advances})
+  end
 end
 
