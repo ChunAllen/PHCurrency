@@ -5,22 +5,17 @@ foreign_currencies = ['USD', 'JPY', 'GBP', 'HKD', 'CHF', 'CAD', 'SGD', 'AUD',
                       'BHD', 'KWD', 'SAR', 'BND', 'IDR', 'THB', 'AED', 'CNY',
                       'KRW', 'EUR']
 
-URL = "http://rate-exchange.appspot.com/currency?from=USD&to=PHP"
-#foreign_currencies.each do |fc|
-  #URL = "http://rate-exchange.appspot.com/currency?from=" + fc + "&to=PHP"
-  #value = RestClient.get URL
-  #parsed << JSON.parse(value)
+forex = Array.new
+#SCHEDULER.every '2s' do
+  foreign_currencies.each do |fc|
+    url = "http://rate-exchange.appspot.com/currency?from=" + fc + "&to=PHP"
+    value = RestClient.get url
+    parsed = JSON.parse(value)
+    forex << parsed
+  end
 #end
 
-SCHEDULER.every '2s', :first_in => 0 do |job|
-  value = RestClient.get URL
-  data = JSON.parse(value)
-  #rate = parsed['rate'].round(2)
 
-  puts data['from']
-  puts data['rate']
-  advances = {:label => '123', :value => '123'}
-  send_event('advances', {items:  advances})
-end
-
+  advances = forex.map{|fx| {:label => fx['from'], :value => fx['rate'].round(2) }}
+  send_event('rates', {items:  advances})
 
