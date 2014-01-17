@@ -16,6 +16,6 @@ forex = Array.new
 #end
 
 
-  advances = forex.map{|fx| {:label => fx['from'], :value => fx['rate'].round(2) }}
+  advances = forex.map{|fx| {:label => fx['from'], :value => fx['rate'].to_f.round(2) }}
   send_event('rates', {items:  advances})
 
